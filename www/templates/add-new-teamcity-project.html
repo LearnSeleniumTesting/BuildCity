@@ -1,0 +1,25 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Add Project</h1>
+    <!--<button class="button button-float button-assertive" ng-click="closeModal()">-->
+
+    <!--</button>-->
+    <div class="buttons">
+      <button class="button button-assertive button-clear" ng-click="closeModal()"> <i class="icon ion-ios-close"></i></button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form name="newTeamCity" ng-submit="AddProject(project)">
+      <div class="list">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Project Name</span>
+          <input type="text" placeholder="Type Project Name" ng-model="project.url">
+        </label>
+        <ion-checkbox ng-model="project.isDefault">Click to use as Default Project</ion-checkbox>
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">Add Project</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

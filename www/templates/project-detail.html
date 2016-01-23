@@ -1,0 +1,26 @@
+<ion-view view-title="Detail Of Project">
+  <ion-content>
+    <div class="list card">
+
+      <div class="item item-avatar item-text-wrap">
+        <img src="img/leaf.jpg">
+        <h2>{{details.name}}</h2>
+        <p>{{details.description}}</p>
+      </div>
+
+      <div class="item item-body">
+
+        <p> <h2>Builds:</h2></p>
+        <div class="list">
+
+          <a href="#" class="item item-icon-left item-text-wrap" ng-repeat="build in buildTypes">
+            <i class="icon ion-ios-paperplane-outline"></i>
+                {{build.name}}
+          </a>
+          </div>
+
+        </div>
+
+    </div>
+  </ion-content>
+</ion-view>
