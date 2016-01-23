@@ -79,10 +79,103 @@ $http.get($scope.endpoint+$scope.userType+$scope.AllProjectRoute).then(function(
   }, function(err) {
     console.error('ERR', err);
   });
-
 $scope.ViewId = function(item){
+  };
+})
 
-};
+.controller('buildCtrl', function($scope, $http, $stateParams){
+  $scope.userType = '/guestAuth';
+  $scope.success = 0;
+  $scope.failure = 0;
+  $scope.error = 0;
+  $scope.route = "http://teamcity.codebetter.com/guestAuth/app/rest/buildTypes/id:"+$stateParams.buildId+"/builds/";
+  $http.get($scope.route).then(function(resp) {
+  $scope.builds = resp.data.build;
+
+    for(var i = 0; i< $scope.builds.length; i++)
+    {
+      if($scope.builds[i].status == "SUCCESS"){
+
+        $scope.success +=1;
+      }
+      else if ($scope.builds[i].status == "FAILURE")
+      {
+        $scope.failure +=1;
+      }
+      else
+      {
+        $scope.error +=1;
+      }
+
+    }
+
+    //building pie chart
+       $scope.chartDonut = {
+         options: {
+            plotOptions: {
+
+                   pie: {
+
+                       dataLabels: {
+                           enabled: false,
+
+                           style: {
+                               fontWeight: 'bold',
+                               color: 'white',
+                               textShadow: '0px 1px 2px black',
+
+                           }
+
+                       },
+                       startAngle: -90,
+                       endAngle: 90,
+                       center: ['50%', '75%']
+                   }
+               },
+                colors: ['#FF0000', '#228B22', '#FFA500'],
+
+       },
+
+
+
+         series: [{
+           type: 'pie',
+           innerSize: '50%',
+           data: [
+             ['Fail', $scope.failure],
+             ['Pass', $scope.success],
+             ['Error', $scope.error]
+           ],
+           name: 'Build Status',
+           //data:[50,40],
+           dataLabels: {
+             rotation: 270,
+             enabled: false,
+             format: '<b>{point.name}</b>: {point.percentage:.1f} MB'
+
+           }
+         }],
+          title: {
+               text: '',
+               align: 'center',
+               verticalAlign: 'middle',
+               y: -60
+           },
+
+
+         credits: {
+           enabled: false
+         },
+
+         loading: false
+       }
+
+  }, function(err) {
+    console.error('ERR', err);
+  });
+
+
+
 })
 
 

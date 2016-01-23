@@ -13,7 +13,7 @@
         <p> <h2>Builds:</h2></p>
         <div class="list">
 
-          <a href="#" class="item item-icon-left item-text-wrap" ng-repeat="build in buildTypes">
+          <a class="item item-icon-left item-text-wrap" ng-repeat="build in buildTypes" href="#/app/build/{{build.id}}">
             <i class="icon ion-ios-paperplane-outline"></i>
                 {{build.name}}
           </a>
