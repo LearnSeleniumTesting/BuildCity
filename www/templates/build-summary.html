@@ -1,31 +1,6 @@
-<ion-view view-title="Build Status">
+<ion-view view-title="Summary">
   <ion-content>
-
-
-    <!-- Donut     -->
-    <div class="card text-center">
-      <div class="item item-text-wrap" style="height: 300px">
-            <highchart config="chartDonut"></highchart>
-      </div>
-      <div class="item item-divider ">
-        <table border="1" style="width:100%">
-          <tr>
-            <td><strong>Number</strong></td>
-            <td><strong>State</strong></td>
-            <td><strong>Status</strong></td>
-          </tr>
-          <tr ng-repeat="build in builds">
-            <td>{{build.number}}</td>
-            <td>{{build.state}}</td>
-            <td>{{build.status}}</td>
-          </tr>
-        </table>
-      </div>
-    </div>
-
-
-
-
+    <h1>In Progress.....</h1>
   </ion-content>
   <div class="tabs tabs-icon-only">
     <a nav-clear class="tab-item disable-user-behavior active" title="Summary" nav-clear ui-sref="app.build">
@@ -44,5 +19,4 @@
       <i class="icon ion-speedometer balanced"></i><span class="tab-title ng-binding" ng-bind-html="title"></span>
     </a>
   </div>
-
 </ion-view>

@@ -70,8 +70,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.service', 'h
             }
           }
         })
+ .state('app.build-summary',{
+     url: '/build/:buildId/build',
+          views: {
+            'menuContent': {
+              templateUrl: 'templates/build-summary.html'
 
-.state('app.build',{
+            }
+          }
+        })
+  .state('app.build',{
      url: '/build/:buildId',
           views: {
             'menuContent': {
