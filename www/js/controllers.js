@@ -69,18 +69,25 @@ $http.get($scope.endpoint+$scope.href+$stateParams.projectId).then(function(resp
 })
 
 
-.controller('projectListCtrl', function($scope, $http, projectsFactory, teamcityRoutes){
+.controller('projectListCtrl', function($scope, $http, $ionicLoading, projectsFactory, teamcityRoutes){
 //This controller is for projecrtlist.html to show list of projects
 $scope.userType = '/guestAuth';
 $scope.AllProjectRoute = teamcityRoutes.all()[0].route;
 $scope.endpoint = projectsFactory.all()[0].endpoint;
+$ionicLoading.show({
+        template: 'Loading...'
+      });
 $http.get($scope.endpoint+$scope.userType+$scope.AllProjectRoute).then(function(resp) {
+
     $scope.conditions = resp.data;
+    $ionicLoading.hide()
   }, function(err) {
     console.error('ERR', err);
   });
 $scope.ViewId = function(item){
   };
+
+
 })
 
 .controller('buildCtrl', function($scope, $http, $stateParams){
@@ -91,7 +98,7 @@ $scope.ViewId = function(item){
   $scope.route = "http://teamcity.codebetter.com/guestAuth/app/rest/buildTypes/id:"+$stateParams.buildId+"/builds/";
   $http.get($scope.route).then(function(resp) {
   $scope.builds = resp.data.build;
-
+  if($scope.builds.length >0){
     for(var i = 0; i< $scope.builds.length; i++)
     {
       if($scope.builds[i].status == "SUCCESS"){
@@ -108,6 +115,7 @@ $scope.ViewId = function(item){
       }
 
     }
+    }
 
     //building pie chart
        $scope.chartDonut = {
@@ -122,18 +130,17 @@ $scope.ViewId = function(item){
                            style: {
                                fontWeight: 'bold',
                                color: 'white',
-                               textShadow: '0px 1px 2px black',
-
+                               textShadow: '0px 1px 2px black'
                            }
 
                        },
                        startAngle: -90,
                        endAngle: 90,
-                       center: ['50%', '75%']
+                       center: ['50%', '50%']
                    }
                },
                 colors: ['#FF0000', '#228B22', '#FFA500'],
-
+//                height: '100px'
        },
 
 
@@ -146,15 +153,17 @@ $scope.ViewId = function(item){
              ['Pass', $scope.success],
              ['Error', $scope.error]
            ],
-           name: 'Build Status',
+           name: '',
            //data:[50,40],
            dataLabels: {
              rotation: 270,
              enabled: false,
-             format: '<b>{point.name}</b>: {point.percentage:.1f} MB'
+             format: ''
 
            }
          }],
+
+         noData: 'No Build Data',
           title: {
                text: '',
                align: 'center',
