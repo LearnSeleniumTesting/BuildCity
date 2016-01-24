@@ -90,14 +90,18 @@ $scope.ViewId = function(item){
 
 })
 
-.controller('buildCtrl', function($scope, $http, $stateParams){
+.controller('buildCtrl', function($scope, $http, $ionicLoading, $stateParams){
   $scope.userType = '/guestAuth';
   $scope.success = 0;
   $scope.failure = 0;
   $scope.error = 0;
   $scope.route = "http://teamcity.codebetter.com/guestAuth/app/rest/buildTypes/id:"+$stateParams.buildId+"/builds/";
+  $ionicLoading.show({
+          template: 'Preparing report...'
+        });
   $http.get($scope.route).then(function(resp) {
   $scope.builds = resp.data.build;
+
   if($scope.builds.length >0){
     for(var i = 0; i< $scope.builds.length; i++)
     {
@@ -178,6 +182,8 @@ $scope.ViewId = function(item){
 
          loading: false
        }
+
+       $ionicLoading.hide()
 
   }, function(err) {
     console.error('ERR', err);

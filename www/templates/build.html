@@ -1,0 +1,31 @@
+<ion-view view-title="Build Status">
+  <ion-content>
+
+
+    <!-- Donut     -->
+    <div class="card text-center">
+      <div class="item item-text-wrap" style="height: 300px">
+            <highchart config="chartDonut"></highchart>
+      </div>
+      <div class="item item-divider ">
+        <table border="1" style="width:100%">
+          <tr>
+            <td><strong>Number</strong></td>
+            <td><strong>State</strong></td>
+            <td><strong>Status</strong></td>
+          </tr>
+          <tr ng-repeat="build in builds">
+            <td>{{build.number}}</td>
+            <td>{{build.state}}</td>
+            <td>{{build.status}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+
+
+    <!-- Donut     -->
+
+  </ion-content>
+</ion-view>
