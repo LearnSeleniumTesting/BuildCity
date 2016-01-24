@@ -95,32 +95,30 @@ $scope.ViewId = function(item){
   $scope.success = 0;
   $scope.failure = 0;
   $scope.error = 0;
-  $scope.route = "http://teamcity.codebetter.com/guestAuth/app/rest/buildTypes/id:"+$stateParams.buildId+"/builds/";
-  $ionicLoading.show({
-          template: 'Preparing report...'
-        });
+  $scope.builds = null;
+  $scope.route = "http://teamcity.codebetter.com/guestAuth/app/rest/buildTypes/id:"+$stateParams.buildId+"/builds/?locator=start:0,count:10000";
+
+  $ionicLoading.show({ template: 'Preparing report...' });
   $http.get($scope.route).then(function(resp) {
-  $scope.builds = resp.data.build;
-
-  if($scope.builds.length >0){
-    for(var i = 0; i< $scope.builds.length; i++)
-    {
-      if($scope.builds[i].status == "SUCCESS"){
-
-        $scope.success +=1;
-      }
-      else if ($scope.builds[i].status == "FAILURE")
+    if(resp.data.count >0){
+      $scope.builds = resp.data.build;
+      for(var i = 0; i< $scope.builds.length; i++)
       {
-        $scope.failure +=1;
-      }
-      else
-      {
-        $scope.error +=1;
-      }
+        if($scope.builds[i].status == "SUCCESS"){
 
-    }
-    }
+          $scope.success +=1;
+        }
+        else if ($scope.builds[i].status == "FAILURE")
+        {
+          $scope.failure +=1;
+        }
+        else
+        {
+          $scope.error +=1;
+        }
 
+      }
+    }
     //building pie chart
        $scope.chartDonut = {
          options: {
