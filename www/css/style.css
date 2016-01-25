@@ -27,3 +27,8 @@
   margin-top: -20px; /* Note, this must be half the font size */
   color: $light;
 }
+
+.col{
+
+border: think solid red;
+}

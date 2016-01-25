@@ -90,16 +90,22 @@ $scope.ViewId = function(item){
 
 })
 
-.controller('buildCtrl', function($scope, $http, $ionicLoading, $stateParams){
+.controller('buildCtrl', function($scope, $http, $ionicLoading, $stateParams, $ionicNavBarDelegate, projectsFactory){
+
+  $scope.endpoint = projectsFactory.all()[0].endpoint;
   $scope.userType = '/guestAuth';
   $scope.success = 0;
   $scope.failure = 0;
   $scope.error = 0;
   $scope.builds = null;
+  $scope.buildReport = [];
+  $scope.resultObject = {};
+  $scope.statusText = null;
   $scope.route = "http://teamcity.codebetter.com/guestAuth/app/rest/buildTypes/id:"+$stateParams.buildId+"/builds/?locator=start:0,count:10000";
 
   $ionicLoading.show({ template: 'Preparing report...' });
   $http.get($scope.route).then(function(resp) {
+
     if(resp.data.count >0){
       $scope.builds = resp.data.build;
       for(var i = 0; i< $scope.builds.length; i++)
@@ -116,8 +122,33 @@ $scope.ViewId = function(item){
         {
           $scope.error +=1;
         }
+        $scope.routeToBuildId = $scope.builds[i].href;
+        $scope.statusText = null;
+        $http.get($scope.endpoint+$scope.routeToBuildId).then(function(resp){
+           $scope.build = resp.data;
+//         console.log($scope.build);
+            $scope.navTitle = $scope.build.buildType.name;
+           $ionicNavBarDelegate.title($scope.myHeader);
+
+            $scope.resultObject = {
+
+                                           number: $scope.build.number,
+                                           result: $scope.build.statusText,
+                                           status: $scope.build.status,
+                                           date: $scope.build.finishDate
+                                          }
+                    $scope.buildReport.push($scope.resultObject);
+
+        },
+        function(err){
+           console.error('ERR', err)
+         });
+
 
       }
+
+
+
     }
     //building pie chart
        $scope.chartDonut = {
@@ -186,6 +217,8 @@ $scope.ViewId = function(item){
   }, function(err) {
     console.error('ERR', err);
   });
+
+
 
 
 
