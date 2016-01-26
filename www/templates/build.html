@@ -1,9 +1,41 @@
-<ion-view view-title="{{myHeader}}">
+<ion-view view-title="{{buildReport[0].buildType.name}}">
   <ion-content>
+    <div class="card">
+      <div class="item item-divider bar bar-balanced">
+        Last build  #{{builds[0].number}}
+      </div>
+      <div class="item item-text-wrap">
+        <div class="row responsive-sm">
+          <div class="col-33" style="">
+            <h1 class="assertive" ng-if="builds[0].status == 'FAILURE'">
+              FAIL
+            </h1>
+            <h1 class="balanced" ng-if="builds[0].status == 'SUCCESS'">
+              PASS
+            </h1>
+            <h1 class="balanced" ng-if="builds[0].status == 'ERROR'">
+              ERROR
+            </h1>
+          </div>
+          <div class="col">
+            <strong>Date:  </strong>{{buildReport[0].date | date:"MM/dd/yy - h:mma"}} <br/>
+            <strong>Agent: </strong>{{buildReport[0].agent.name}}
+          </div>
+        </div>
+        <div class="row text-wrap">
+          <p><strong>Result :</strong>{{buildReport[0].result}}</p>
+        </div>
+
+      </div>
+
+    </div>
 
 
     <!-- Donut     -->
     <div class="card text-center">
+      <div class="item item-divider bar bar-balanced">
+        Summary
+      </div>
       <div class="item item-text-wrap" style="height: 300px">
             <highchart config="chartDonut"></highchart>
       </div>

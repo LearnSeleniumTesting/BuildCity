@@ -52,6 +52,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.service', 'h
         }
       }
     })
+    .state('app.queuedBuild', {
+          url: '/queuedBuilds',
+          views: {
+            'menuContent': {
+              templateUrl: 'templates/queued-builds.html',
+              controller: 'queuedBuildCtrl'
+            }
+          }
+        })
   .state('app.single', {
     url: '/project/:projectId',
     views: {

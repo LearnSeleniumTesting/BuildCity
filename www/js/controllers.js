@@ -53,6 +53,9 @@ angular.module('starter.controllers', [])
  $scope.setGuest = function(){
     $state.go('app.projectList');
  };
+  $scope.goQueuedBuild = function(){
+     $state.go('app.queuedBuild');
+  };
 
 })
 
@@ -129,13 +132,14 @@ $scope.ViewId = function(item){
 //         console.log($scope.build);
             $scope.navTitle = $scope.build.buildType.name;
            $ionicNavBarDelegate.title($scope.myHeader);
-
+//            console.log($scope.build);
             $scope.resultObject = {
-
+                                           agent: $scope.build.agent,
                                            number: $scope.build.number,
                                            result: $scope.build.statusText,
                                            status: $scope.build.status,
-                                           date: $scope.build.finishDate
+                                           date: $scope.build.finishDate,
+                                           type: $scope.build.buildType
                                           }
                     $scope.buildReport.push($scope.resultObject);
 
@@ -235,7 +239,7 @@ $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
 
   $scope.availableProjects = [];
   $scope.availableProjects.push({endpoint: projectsFactory.all()[0].endpoint, selected: true});
-  console.log($scope.availableProjects);
+//  console.log($scope.availableProjects);
 // Open the login modal
   $scope.add = function() {
     $scope.modal.show();
@@ -265,4 +269,22 @@ $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
     project.isDefault = false;
   }
 
+})
+
+.controller('queuedBuildCtrl', function($scope, $http, $ionicModal, projectsFactory){
+$scope.qBuilds = [];
+$scope.endpoint = projectsFactory.all()[0].endpoint;
+$scope.buildQueueRoute = '/guestAuth/app/rest/buildQueue'
+$http.get($scope.endpoint+$scope.buildQueueRoute).then(function(resp){
+
+$scope.queuedBuild = resp.data.build;
+$scope.queuedBuild.forEach(function(build){
+$http.get($scope.endpoint+build.href).then(function(resp){
+$scope.qBuilds.push(resp.data);
+//console.log($scope.qBuilds);
+},function(ERR){})});
+
+}, function(err) {
+      console.error('ERR', err);
+    });
 });
