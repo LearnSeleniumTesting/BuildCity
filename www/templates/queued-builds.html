@@ -1,0 +1,10 @@
+<ion-view view-title="Queued Builds">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-text-wrap" ng-repeat="project in qBuilds">
+        {{project.buildType.projectId}}::{{project.buildType.name}}
+        <p> {{project.waitReason}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
