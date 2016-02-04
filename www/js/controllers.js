@@ -57,6 +57,8 @@ angular.module('starter.controllers', [])
      $state.go('app.queuedBuild');
   };
 
+
+
 })
 
 .controller('projectDetailCtrl', function($scope, $stateParams, $http, projectsFactory) {
@@ -72,11 +74,12 @@ $http.get($scope.endpoint+$scope.href+$stateParams.projectId).then(function(resp
 })
 
 
-.controller('projectListCtrl', function($scope, $http, $ionicLoading, projectsFactory, teamcityRoutes){
+.controller('projectListCtrl', function($scope, $http, $state, $ionicLoading, projectsFactory, teamcityRoutes){
 //This controller is for projecrtlist.html to show list of projects
 $scope.userType = '/guestAuth';
 $scope.AllProjectRoute = teamcityRoutes.all()[0].route;
 $scope.endpoint = projectsFactory.all()[0].endpoint;
+$scope.favList = [];
 $ionicLoading.show({
         template: 'Loading...'
       });
@@ -87,10 +90,24 @@ $http.get($scope.endpoint+$scope.userType+$scope.AllProjectRoute).then(function(
   }, function(err) {
     console.error('ERR', err);
   });
+
 $scope.ViewId = function(item){
   };
 
+$scope.addFav = function(item){
 
+$scope.favList.push(item);
+console.log($scope.favList.length);
+
+};
+
+$scope.GoToProject = function(item){
+$state.go('app.single',{projectId: item});
+//console.log(item);
+};
+
+$scope.count = 23;
+//$scope.state = "#/app/project/{{"+item+"}}"; #/app/project/{{project.id}}
 })
 
 .controller('buildCtrl', function($scope, $http, $ionicLoading, $stateParams, $ionicNavBarDelegate, projectsFactory){
