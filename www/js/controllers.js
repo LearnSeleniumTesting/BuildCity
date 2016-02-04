@@ -95,14 +95,23 @@ $scope.ViewId = function(item){
   };
 
 $scope.addFav = function(item){
-
+if ($scope.favList.indexOf(item) == -1)
+{
 $scope.favList.push(item);
-console.log($scope.favList.length);
+
+}else
+{
+var i = $scope.favList.indexOf(item);
+$scope.favList.splice(i,1);
+
+}
+console.log($scope.favList.indexOf(item));
+console.log($scope.favList);
 
 };
 
 $scope.GoToProject = function(item){
-$state.go('app.single',{projectId: item});
+$state.go('app.singleProjectDetail',{projectId: item});
 //console.log(item);
 };
 
