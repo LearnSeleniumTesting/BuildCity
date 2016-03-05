@@ -74,7 +74,7 @@ $http.get($scope.endpoint+$scope.href+$stateParams.projectId).then(function(resp
 })
 
 
-.controller('projectListCtrl', function($scope, $http, $state, $ionicLoading, projectsFactory, teamcityRoutes){
+.controller('projectListCtrl', function($scope, $http, $state, $ionicLoading, projectsFactory, teamcityRoutes, $localstorage){
 //This controller is for projecrtlist.html to show list of projects
 $scope.userType = '/guestAuth';
 $scope.AllProjectRoute = teamcityRoutes.all()[0].route;
@@ -95,28 +95,27 @@ $scope.ViewId = function(item){
   };
 
 $scope.addFav = function(item){
+
 if ($scope.favList.indexOf(item) == -1)
-{
-$scope.favList.push(item);
+  {
+    $scope.favList.push(item);
+  }
+  else //Remove project from favList
+  {
+    $scope.favList.splice($scope.favList.indexOf(item),1);
+  }
 
-}else
-{
-var i = $scope.favList.indexOf(item);
-$scope.favList.splice(i,1);
-
-}
-console.log($scope.favList.indexOf(item));
-console.log($scope.favList);
-
+  $localstorage.setObject('favos', $scope.favList);
+  $scope.selectedFavList = $localstorage.getObject('favos');
+  console.log($scope.selectedFavList);
 };
-
+$scope.favList = $localstorage.getObject('favos');
+$scope.selectedFavList = $localstorage.getObject('favos');
 $scope.GoToProject = function(item){
 $state.go('app.singleProjectDetail',{projectId: item});
-//console.log(item);
+
 };
 
-$scope.count = 23;
-//$scope.state = "#/app/project/{{"+item+"}}"; #/app/project/{{project.id}}
 })
 
 .controller('buildCtrl', function($scope, $http, $ionicLoading, $stateParams, $ionicNavBarDelegate, projectsFactory){
@@ -167,6 +166,7 @@ $scope.count = 23;
                                            date: $scope.build.finishDate,
                                            type: $scope.build.buildType
                                           }
+
                     $scope.buildReport.push($scope.resultObject);
 
         },
@@ -313,4 +313,83 @@ $scope.qBuilds.push(resp.data);
 }, function(err) {
       console.error('ERR', err);
     });
-});
+})
+
+.controller('testPageCtrl', function($scope, $cordovaDatePicker) {
+$scope.datepickerObject_start = {
+      titleLabel: 'Start Date',  //Optional
+      todayLabel: 'Today',  //Optional
+      closeLabel: 'Close',  //Optional
+      setLabel: 'Set',  //Optional
+      setButtonType : 'button-assertive',  //Optional
+      todayButtonType : 'button-assertive',  //Optional
+      closeButtonType : 'button-assertive',  //Optional
+      inputDate: new Date(),  //Optional
+      mondayFirst: true,  //Optional
+//      disabledDates: disabledDates, //Optional
+      weekDaysList: weekDaysList, //Optional
+      monthList: monthList, //Optional
+      templateType: 'popup', //Optional
+      showTodayButton: 'true', //Optional
+      modalHeaderColor: 'bar-positive', //Optional
+      modalFooterColor: 'bar-positive', //Optional
+      from: new Date(2012, 8, 2), //Optional
+      to: new Date(2018, 8, 25),  //Optional
+      callback: function (val) {  //Mandatory
+        datePickerCallback(val);
+      }
+//      dateFormat: 'dd-MM-YYYY', //Optional
+//      closeOnSelect: false, //Optional
+    };
+
+
+    $scope.datepickerObject_end = {
+          titleLabel: 'Start Date',  //Optional
+          todayLabel: 'Today',  //Optional
+          closeLabel: 'Close',  //Optional
+          setLabel: 'Set',  //Optional
+          setButtonType : 'button-assertive',  //Optional
+          todayButtonType : 'button-assertive',  //Optional
+          closeButtonType : 'button-assertive',  //Optional
+          inputDate: new Date(),  //Optional
+          mondayFirst: true,  //Optional
+    //      disabledDates: disabledDates, //Optional
+          weekDaysList: weekDaysList, //Optional
+          monthList: monthList, //Optional
+          templateType: 'popup', //Optional
+          showTodayButton: 'true', //Optional
+          modalHeaderColor: 'bar-positive', //Optional
+          modalFooterColor: 'bar-positive', //Optional
+          from: new Date(2012, 8, 2), //Optional
+          to: new Date(2018, 8, 25),  //Optional
+          callback: function (val) {  //Mandatory
+            datePickerCallback(val);
+          }
+    //      dateFormat: 'dd-MM-YYYY', //Optional
+    //      closeOnSelect: false, //Optional
+        };
+    var weekDaysList = ["Sun", "Mon", "Tue", "Wed", "thu", "Fri", "Sat"];
+    $scope.selectedDate_start = null;
+    $scope.selectedDate_end = null;
+
+    var monthList = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+    var datePickerCallback_start = function (val) {
+      if (typeof(val) === 'undefined') {
+        console.log('No date selected');
+      } else {
+        $scope.selectedDate_start = val;
+        console.log('Selected date is : ', val)
+      }
+    };
+
+
+    var datePickerCallback_end = function (val) {
+          if (typeof(val) === 'undefined') {
+            console.log('No date selected');
+          } else {
+            $scope.selectedDate_end = val;
+            console.log('Selected date is : ', val)
+          }
+        };
+                             });
