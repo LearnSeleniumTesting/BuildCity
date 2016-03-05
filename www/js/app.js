@@ -98,6 +98,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.service', 'h
             }
           }
         })
+   .state('app.test',{
+      url: '/test',
+           views: {
+             'menuContent': {
+               templateUrl: 'templates/test.html',
+               controller: 'testCtrl'
+
+             }
+           }
+         })
 
         .state('app.newTeamcity',{
              url: '/newTeamcity',
