@@ -3,5 +3,10 @@
   "private": "true",
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.2.4"
+  },
+  "dependencies": {
+    "ngCordova": "^0.1.24-alpha",
+    "ionic-multi-date-picker": "^2.0.0",
+    "ionic-datepicker": "^0.9.0"
   }
 }

@@ -298,8 +298,86 @@ $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
 })
 
 
-.controller('testCtrl', function($scope, $http, $ionicModal, projectsFactory){
-$scope.test = "This is my test page"
+.controller('testCtrl', function($scope, $http, $cordovaDatePicker){
+    $scope.test = "This is my test page"
+    $scope.datepickerObject_start = {
+      titleLabel: 'Start Date',  //Optional
+      todayLabel: 'Today',  //Optional
+      closeLabel: 'Close',  //Optional
+      setLabel: 'Set',  //Optional
+      setButtonType : 'button-assertive',  //Optional
+      todayButtonType : 'button-assertive',  //Optional
+      closeButtonType : 'button-assertive',  //Optional
+      inputDate: new Date(),  //Optional
+      mondayFirst: true,  //Optional
+//      disabledDates: disabledDates, //Optional
+      weekDaysList: weekDaysList, //Optional
+      monthList: monthList, //Optional
+      templateType: 'popup', //Optional
+      showTodayButton: 'true', //Optional
+      modalHeaderColor: 'bar-positive', //Optional
+      modalFooterColor: 'bar-positive', //Optional
+      from: new Date(2012, 8, 2), //Optional
+      callback: function (val) {  //Mandatory
+        datePickerCallback_start(val);
+      },
+      dateFormat: 'MM/dd/yyyy', //Optional
+      closeOnSelect: false, //Optional
+    };
+     $scope.datepickerObject_end = {
+          titleLabel: 'End Date',  //Optional
+          todayLabel: 'Today',  //Optional
+          closeLabel: 'Close',  //Optional
+          setLabel: 'Set',  //Optional
+          setButtonType : 'button-assertive',  //Optional
+          todayButtonType : 'button-assertive',  //Optional
+          closeButtonType : 'button-assertive',  //Optional
+          inputDate: new Date(),  //Optional
+          mondayFirst: true,  //Optional
+    //      disabledDates: disabledDates, //Optional
+          weekDaysList: weekDaysList, //Optional
+          monthList: monthList, //Optional
+          templateType: 'popup', //Optional
+          showTodayButton: 'true', //Optional
+          modalHeaderColor: 'bar-positive', //Optional
+          modalFooterColor: 'bar-positive', //Optional
+          from: $scope.datepickerObject_start.inputDate,
+          from: new Date(2012, 8, 2), //Optional
+          callback: function (val) {  //Mandatory
+            datePickerCallback_end(val);
+          },
+      dateFormat: 'MM/dd/yyyy', //Optional
+          closeOnSelect: false, //Optional
+        };
+
+
+
+    var weekDaysList = ["Sun", "Mon", "Tue", "Wed", "thu", "Fri", "Sat"];
+    var monthList = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+    var datePickerCallback_start = function (val) {
+      if (typeof(val) === 'undefined') {
+        console.log('No date selected');
+
+      } else {
+        console.log('Selected date is : ', val);
+        $scope.datepickerObject_start["inputDate"] = val
+        $scope.datepickerObject_end["from"] = val;
+      }
+    };
+
+    var datePickerCallback_end = function (val) {
+      if (typeof(val) === 'undefined') {
+        console.log('No date selected');
+
+      } else {
+      if(val < $scope.datepickerObject_start["inputDate"]){
+      alert("Please select End Date highter than start date");
+      }
+        console.log('Selected date is : ', val);
+        $scope.datepickerObject_end["inputDate"] = val
+      }
+    };
 
 })
 
