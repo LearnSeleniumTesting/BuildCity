@@ -31,8 +31,6 @@ angular.module('starter.controllers', [])
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
-//    console.log('Doing login', $scope.loginData);
-
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
     $timeout(function() {
@@ -41,21 +39,23 @@ angular.module('starter.controllers', [])
   };
 })
 
-
-
 .controller('loginCtrl', function($scope, $state, projectsFactory){
+
  //This controller is for login.html where you can click on button to login as guest.
  $scope.activeProject = projectsFactory.all()[0].endpoint;
  $scope.guestUrl = null;
+
  $scope.GoToSetting = function(){
- $state.go('app.settings');
+  $state.go('app.settings');
  }
+
  $scope.setGuest = function(){
     $state.go('app.projectList');
  };
-  $scope.goQueuedBuild = function(){
+
+ $scope.goQueuedBuild = function(){
      $state.go('app.queuedBuild');
-  };
+ };
 
 
 
@@ -72,7 +72,6 @@ $http.get($scope.endpoint+$scope.href+$stateParams.projectId).then(function(resp
   });
 
 })
-
 
 .controller('projectListCtrl', function($scope, $http, $state, $ionicLoading, projectsFactory, teamcityRoutes, $localstorage){
 //This controller is for projecrtlist.html to show list of projects
@@ -254,7 +253,6 @@ $state.go('app.singleProjectDetail',{projectId: item});
 
 })
 
-
 .controller('settingsCtrl', function($scope, $ionicModal, projectsFactory){
 //This controller is to show the project-settings.html page.
 $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
@@ -297,9 +295,9 @@ $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
 
 })
 
-
-.controller('testCtrl', function($scope, $http, $cordovaDatePicker){
+.controller('testCtrl', function($scope, $http, $cordovaDatePicker, $ionicPopup, teamcityTimeFormatter){
     $scope.test = "This is my test page"
+
     $scope.datepickerObject_start = {
       titleLabel: 'Start Date',  //Optional
       todayLabel: 'Today',  //Optional
@@ -324,7 +322,7 @@ $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
       dateFormat: 'MM/dd/yyyy', //Optional
       closeOnSelect: false, //Optional
     };
-     $scope.datepickerObject_end = {
+    $scope.datepickerObject_end = {
           titleLabel: 'End Date',  //Optional
           todayLabel: 'Today',  //Optional
           closeLabel: 'Close',  //Optional
@@ -350,8 +348,6 @@ $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
           closeOnSelect: false, //Optional
         };
 
-
-
     var weekDaysList = ["Sun", "Mon", "Tue", "Wed", "thu", "Fri", "Sat"];
     var monthList = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
@@ -365,37 +361,68 @@ $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
         $scope.datepickerObject_end["from"] = val;
       }
     };
-
     var datePickerCallback_end = function (val) {
       if (typeof(val) === 'undefined') {
         console.log('No date selected');
 
-      } else {
-      if(val < $scope.datepickerObject_start["inputDate"]){
-      alert("Please select End Date highter than start date");
-      }
+      } else
+      {
+        if(val < $scope.datepickerObject_start["inputDate"]){
+          $scope.showAlert();
+        }
+        var abc = teamcityTimeFormatter.all(val, val);
+        console.log(abc);
         console.log('Selected date is : ', val);
         $scope.datepickerObject_end["inputDate"] = val
       }
     };
 
+    $scope.showAlert = function() {
+     var alertPopup = $ionicPopup.alert({
+       title: 'End Date',
+       template: 'End Date should be more than start date'
+     });
+
+ };
+
+//    // http controller
+//    $scope.showJsonData = function(){
+////    var url = "/js/";
+////    if(ionic.Platform.isAndroid()){
+////        url = "/android_asset/www/";
+////    }
+    $http.get( '/js/someData.json').then(function(resp){
+//    console.log(res p);
+$scope.showJsonData  = resp.data.name;
+    },function(ERR){
+    console.log(ERR);
+    }
+
+    );
+//    };
+
+
 })
 
 .controller('queuedBuildCtrl', function($scope, $http, $ionicModal, projectsFactory){
+
 $scope.qBuilds = [];
 $scope.endpoint = projectsFactory.all()[0].endpoint;
 $scope.buildQueueRoute = '/guestAuth/app/rest/buildQueue'
+
 $http.get($scope.endpoint+$scope.buildQueueRoute).then(function(resp){
-
-$scope.queuedBuild = resp.data.build;
-$scope.queuedBuild.forEach(function(build){
-$http.get($scope.endpoint+build.href).then(function(resp){
-$scope.qBuilds.push(resp.data);
-//console.log($scope.qBuilds);
-},function(ERR){})});
-
+  $scope.queuedBuild = resp.data.build;
+  $scope.queuedBuild.forEach(function(build){
+    $http.get($scope.endpoint+build.href).then(function(resp){
+      $scope.qBuilds.push(resp.data);
+    },function(ERR){
+      }
+    )
+  });
 }, function(err) {
       console.error('ERR', err);
-    });
+   }
+);
+
 });
 

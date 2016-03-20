@@ -66,7 +66,20 @@ angular.module('starter.service',[])
             }
             }
 
-    });
+    })
+    .factory('teamcityTimeFormatter', function($http){
+
+        return {
+        all: function(start, end) {
+          $http.get("http://teamcity.codebetter.com/guestAuth/app/rest/builds").then(function(resp){
+                     console.log(resp);
+                     });
+
+        }
+
+
+
+    }});
 
 
 

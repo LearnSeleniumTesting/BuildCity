@@ -1,6 +1,7 @@
 <ion-view view-title="My Test Page">
   <ion-content>
     <div class="row">
+      <div class="col text-left">
       <ionic-datepicker input-obj="datepickerObject_start">
         <div class="col">
           <button ng-click="to.onclick(model,options)" class="button button-outline button-balanced">
@@ -8,28 +9,20 @@
           </button>
         </div>
       </ionic-datepicker>
-
-      <ionic-datepicker input-obj="datepickerObject_end">
+        </div>
+      <div class="col text-right">
+      <ionic-datepicker side="right" input-obj="datepickerObject_end">
         <div class="col">
-      <button ng-click="to.onclick(model,options)" class="button button-outline button-balanced">
+         <button ng-click="to.onclick(model,options)" class="button button-outline button-balanced">
       <i class="icon ion-ios-calendar-outline"></i> {{datepickerObject_end.inputDate | date:datepickerObject_end.dateFormat}}
       </button>
+       </div>
+      </ionic-datepicker>
+        </div>
+    </div>
+    <div>
+    </div>
+    {{showJsonData}}
 
-    </div>
-      </ionic-datepicker>
-    </div>
-      </ionic-datepicker>
-    <ionic-datepicker input-obj="datepickerObject">
-    <ion-item class="item-icon-right">
-      <i ng-click="to.onclick(model,options)"
-         class="icon ion-ios-calendar-outline"></i>
-      {{datepickerObject.inputDate | date:datepickerObject.dateFormat}}
-    </ion-item>
-    </ionic-datepicker>
-    <!--<ionic-datepicker input-obj="datepickerObject">-->
-      <!--<i ng-click="to.onclick(model,options)"-->
-         <!--class="icon ion-ios-calendar-outline"></i> {{datepickerObject.inputDate | date:datepickerObject.dateFormat}}</button>-->
-    <!--</ionic-datepicker>-->
-    {{selectedDate}}
   </ion-content>
 </ion-view>
