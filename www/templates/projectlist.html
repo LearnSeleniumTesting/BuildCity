@@ -1,7 +1,7 @@
 <ion-view view-title="Projects">
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="project in conditions.project"  href="#/app/project/{{project.id}}">
+      <ion-item ng-repeat="project in conditions.project | orderBy: 'name'"  href="#/app/project/{{project.id}}">
         {{project.name}}!
       </ion-item>
     </ion-list>

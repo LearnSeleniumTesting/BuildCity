@@ -83,6 +83,7 @@ $ionicLoading.show({
 $http.get($scope.endpoint+$scope.userType+$scope.AllProjectRoute).then(function(resp) {
 
     $scope.conditions = resp.data;
+
     $ionicLoading.hide()
   }, function(err) {
     console.error('ERR', err);
@@ -104,7 +105,7 @@ $scope.ViewId = function(item){
   $scope.buildReport = [];
   $scope.resultObject = {};
   $scope.statusText = null;
-  $scope.route = "http://teamcity.codebetter.com/guestAuth/app/rest/buildTypes/id:"+$stateParams.buildId+"/builds/?locator=start:0,count:10000";
+  $scope.route = "http://teamcity/guestAuth/app/rest/buildTypes/id:"+$stateParams.buildId+"/builds/?locator=branch:";
 
   $ionicLoading.show({ template: 'Preparing report...' });
   $http.get($scope.route).then(function(resp) {
@@ -134,6 +135,7 @@ $scope.ViewId = function(item){
            $ionicNavBarDelegate.title($scope.myHeader);
 //            console.log($scope.build);
             $scope.resultObject = {
+                                           id: $scope.build.id,
                                            agent: $scope.build.agent,
                                            number: $scope.build.number,
                                            result: $scope.build.statusText,

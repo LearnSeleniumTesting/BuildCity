@@ -13,7 +13,7 @@ angular.module('starter.service',[])
     .factory('projectsFactory', function(){
 
     var allProjects = [
-                        { endpoint: "http://teamcity.codebetter.com" }
+                        { endpoint: "http://teamcity" }
 
                         ];
 

@@ -18,6 +18,7 @@
             </h1>
           </div>
           <div class="col">
+            <strong>Project: </strong>{{buildReport[0].type.id}}<br>
             <strong>Date:  </strong>{{buildReport[0].date | date:"MM/dd/yy - h:mma"}} <br/>
             <strong>Agent: </strong>{{buildReport[0].agent.name}}
           </div>
@@ -44,10 +45,11 @@
       <ion-list>
         <ion-item ng-repeat="item in buildReport">
           <div class="item text-left item-text-wrap">
-            <p><strong>Build #:</strong>{{item.number}}</p>
-            <p><strong>date &nbsp&nbsp&nbsp:</strong>{{item.date | date:"MM/dd/yy - h:mma"}}</p>
-            <p><strong>Status :</strong>{{item.status}}</p>
-            <p><strong>Result :</strong>{{item.result}}</p>
+            <p><strong>Build #:&nbsp</strong>{{item.number}}</p>
+            <p><strong>Date &nbsp&nbsp&nbsp:&nbsp</strong>{{item.date | date:"MM/dd/yy - h:mma"}}</p>
+            <p><strong>Status :&nbsp</strong>{{item.status == 'FAILURE' ? 'Fail' : 'Pass'}}</p>
+            <p><strong>Project :&nbsp</strong>{{item.type.id}}</p>
+            <p><strong>Project :&nbsp</strong>{{item}}</p>
           </div>
         </ion-item>
       </ion-list>
