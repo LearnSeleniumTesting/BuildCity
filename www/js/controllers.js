@@ -43,7 +43,7 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('loginCtrl', function($scope, $state, projectsFactory){
+.controller('loginCtrl', function($scope, $state, projectsFactory, myService){
  //This controller is for login.html where you can click on button to login as guest.
  $scope.activeProject = projectsFactory.all()[0].endpoint;
  $scope.guestUrl = null;
@@ -229,7 +229,8 @@ $scope.ViewId = function(item){
 })
 
 
-.controller('settingsCtrl', function($scope, $ionicModal, projectsFactory){
+.controller('settingsCtrl', function($scope, $ionicModal, projectsFactory, myService){
+$scope.availableProjects = [{url: "http://teamcity.codebetter.com/", isChecked: true}];
 //This controller is to show the project-settings.html page.
 $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
   scope: $scope
@@ -237,13 +238,15 @@ $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
       $scope.modal = modal;
     });
 
-  $scope.availableProjects = [];
-  $scope.availableProjects.push({endpoint: projectsFactory.all()[0].endpoint, selected: true});
+
+//  $scope.availableProjects.push({endpoint: projectsFactory.all()[0].endpoint, selected: true});
 //  console.log($scope.availableProjects);
 // Open the login modal
   $scope.add = function() {
     $scope.modal.show();
   };
+
+
 
   // Triggered in the login modal to close it
     $scope.closeModal = function() {
@@ -253,17 +256,11 @@ $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
 
   // Add project and once you add, it will clear fields
   $scope.AddProject = function(project){
-
     if(project.isDefault == true)
     {
-      $scope.availableProjects.forEach(function(obj) { obj.selected = false;  });
+      $scope.availableProjects.forEach(function(obj) { obj.isChecked = false;  });
     }
-
-    $scope.availableProjects.push({url: project.url, selected: project.isDefault});
-
-
-
-
+    $scope.availableProjects.push({url: project.url, isChecked: project.isDefault});
     $scope.closeModal();
     project.url = "";
     project.isDefault = false;
@@ -287,4 +284,7 @@ $scope.qBuilds.push(resp.data);
 }, function(err) {
       console.error('ERR', err);
     });
-});
+})
+.service('myService', function() {
+      this.xxx = "yyy";
+    });
