@@ -26,7 +26,23 @@ angular.module('starter.service',[])
           }
       }
     })
-
+    .factory('$localstorage', ['$window', function($window) {
+      return {
+        set: function(key, value) {
+          //before storing the value, get the value, parse it that will convert into an array then push into that array and store back to the same value.
+          $window.localStorage[key] = value;
+        },
+        get: function(key, defaultValue) {
+          return $window.localStorage[key] || defaultValue;
+        },
+        setObject: function(key, value) {
+          $window.localStorage[key] = JSON.stringify(value);
+        },
+        getObject: function(key) {
+          return JSON.parse($window.localStorage[key] || '{}');
+        }
+      }
+    }])
     .factory('teamcityRoutes', function(){
 
         var allRoutes =[
@@ -50,7 +66,20 @@ angular.module('starter.service',[])
             }
             }
 
-    });
+    })
+    .factory('teamcityTimeFormatter', function($http){
+
+        return {
+        all: function(start, end) {
+          $http.get("http://teamcity.codebetter.com/guestAuth/app/rest/builds").then(function(resp){
+                     console.log(resp);
+                     });
+
+        }
+
+
+
+    }});
 
 
 

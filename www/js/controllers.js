@@ -31,8 +31,6 @@ angular.module('starter.controllers', [])
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
-//    console.log('Doing login', $scope.loginData);
-
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
     $timeout(function() {
@@ -41,21 +39,25 @@ angular.module('starter.controllers', [])
   };
 })
 
-
-
 .controller('loginCtrl', function($scope, $state, projectsFactory){
+
  //This controller is for login.html where you can click on button to login as guest.
  $scope.activeProject = projectsFactory.all()[0].endpoint;
  $scope.guestUrl = null;
+
  $scope.GoToSetting = function(){
- $state.go('app.settings');
+  $state.go('app.settings');
  }
+
  $scope.setGuest = function(){
     $state.go('app.projectList');
  };
-  $scope.goQueuedBuild = function(){
+
+ $scope.goQueuedBuild = function(){
      $state.go('app.queuedBuild');
-  };
+ };
+
+
 
 })
 
@@ -71,12 +73,12 @@ $http.get($scope.endpoint+$scope.href+$stateParams.projectId).then(function(resp
 
 })
 
-
-.controller('projectListCtrl', function($scope, $http, $ionicLoading, projectsFactory, teamcityRoutes){
+.controller('projectListCtrl', function($scope, $http, $state, $ionicLoading, projectsFactory, teamcityRoutes, $localstorage){
 //This controller is for projecrtlist.html to show list of projects
 $scope.userType = '/guestAuth';
 $scope.AllProjectRoute = teamcityRoutes.all()[0].route;
 $scope.endpoint = projectsFactory.all()[0].endpoint;
+$scope.favList = [];
 $ionicLoading.show({
         template: 'Loading...'
       });
@@ -87,9 +89,31 @@ $http.get($scope.endpoint+$scope.userType+$scope.AllProjectRoute).then(function(
   }, function(err) {
     console.error('ERR', err);
   });
+
 $scope.ViewId = function(item){
   };
 
+$scope.addFav = function(item){
+
+if ($scope.favList.indexOf(item) == -1)
+  {
+    $scope.favList.push(item);
+  }
+  else //Remove project from favList
+  {
+    $scope.favList.splice($scope.favList.indexOf(item),1);
+  }
+
+  $localstorage.setObject('favos', $scope.favList);
+  $scope.selectedFavList = $localstorage.getObject('favos');
+  console.log($scope.selectedFavList);
+};
+$scope.favList = $localstorage.getObject('favos');
+$scope.selectedFavList = $localstorage.getObject('favos');
+$scope.GoToProject = function(item){
+$state.go('app.singleProjectDetail',{projectId: item});
+
+};
 
 })
 
@@ -141,6 +165,7 @@ $scope.ViewId = function(item){
                                            date: $scope.build.finishDate,
                                            type: $scope.build.buildType
                                           }
+
                     $scope.buildReport.push($scope.resultObject);
 
         },
@@ -228,7 +253,6 @@ $scope.ViewId = function(item){
 
 })
 
-
 .controller('settingsCtrl', function($scope, $ionicModal, projectsFactory){
 //This controller is to show the project-settings.html page.
 $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
@@ -271,20 +295,134 @@ $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
 
 })
 
+.controller('testCtrl', function($scope, $http, $cordovaDatePicker, $ionicPopup, teamcityTimeFormatter){
+    $scope.test = "This is my test page"
+
+    $scope.datepickerObject_start = {
+      titleLabel: 'Start Date',  //Optional
+      todayLabel: 'Today',  //Optional
+      closeLabel: 'Close',  //Optional
+      setLabel: 'Set',  //Optional
+      setButtonType : 'button-assertive',  //Optional
+      todayButtonType : 'button-assertive',  //Optional
+      closeButtonType : 'button-assertive',  //Optional
+      inputDate: new Date(),  //Optional
+      mondayFirst: true,  //Optional
+//      disabledDates: disabledDates, //Optional
+      weekDaysList: weekDaysList, //Optional
+      monthList: monthList, //Optional
+      templateType: 'popup', //Optional
+      showTodayButton: 'true', //Optional
+      modalHeaderColor: 'bar-positive', //Optional
+      modalFooterColor: 'bar-positive', //Optional
+      from: new Date(2012, 8, 2), //Optional
+      callback: function (val) {  //Mandatory
+        datePickerCallback_start(val);
+      },
+      dateFormat: 'MM/dd/yyyy', //Optional
+      closeOnSelect: false, //Optional
+    };
+    $scope.datepickerObject_end = {
+          titleLabel: 'End Date',  //Optional
+          todayLabel: 'Today',  //Optional
+          closeLabel: 'Close',  //Optional
+          setLabel: 'Set',  //Optional
+          setButtonType : 'button-assertive',  //Optional
+          todayButtonType : 'button-assertive',  //Optional
+          closeButtonType : 'button-assertive',  //Optional
+          inputDate: new Date(),  //Optional
+          mondayFirst: true,  //Optional
+    //      disabledDates: disabledDates, //Optional
+          weekDaysList: weekDaysList, //Optional
+          monthList: monthList, //Optional
+          templateType: 'popup', //Optional
+          showTodayButton: 'true', //Optional
+          modalHeaderColor: 'bar-positive', //Optional
+          modalFooterColor: 'bar-positive', //Optional
+          from: $scope.datepickerObject_start.inputDate,
+          from: new Date(2012, 8, 2), //Optional
+          callback: function (val) {  //Mandatory
+            datePickerCallback_end(val);
+          },
+      dateFormat: 'MM/dd/yyyy', //Optional
+          closeOnSelect: false, //Optional
+        };
+
+    var weekDaysList = ["Sun", "Mon", "Tue", "Wed", "thu", "Fri", "Sat"];
+    var monthList = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+    var datePickerCallback_start = function (val) {
+      if (typeof(val) === 'undefined') {
+        console.log('No date selected');
+
+      } else {
+        console.log('Selected date is : ', val);
+        $scope.datepickerObject_start["inputDate"] = val
+        $scope.datepickerObject_end["from"] = val;
+      }
+    };
+    var datePickerCallback_end = function (val) {
+      if (typeof(val) === 'undefined') {
+        console.log('No date selected');
+
+      } else
+      {
+        if(val < $scope.datepickerObject_start["inputDate"]){
+          $scope.showAlert();
+        }
+        var abc = teamcityTimeFormatter.all(val, val);
+        console.log(abc);
+        console.log('Selected date is : ', val);
+        $scope.datepickerObject_end["inputDate"] = val
+      }
+    };
+
+    $scope.showAlert = function() {
+     var alertPopup = $ionicPopup.alert({
+       title: 'End Date',
+       template: 'End Date should be more than start date'
+     });
+
+ };
+
+//    // http controller
+//    $scope.showJsonData = function(){
+////    var url = "/js/";
+////    if(ionic.Platform.isAndroid()){
+////        url = "/android_asset/www/";
+////    }
+    $http.get( '/js/someData.json').then(function(resp){
+//    console.log(res p);
+$scope.showJsonData  = resp.data.name;
+    },function(ERR){
+    console.log(ERR);
+    }
+
+    );
+//    };
+
+
+})
+
 .controller('queuedBuildCtrl', function($scope, $http, $ionicModal, projectsFactory){
+
 $scope.qBuilds = [];
 $scope.endpoint = projectsFactory.all()[0].endpoint;
 $scope.buildQueueRoute = '/guestAuth/app/rest/buildQueue'
+
 $http.get($scope.endpoint+$scope.buildQueueRoute).then(function(resp){
-
-$scope.queuedBuild = resp.data.build;
-$scope.queuedBuild.forEach(function(build){
-$http.get($scope.endpoint+build.href).then(function(resp){
-$scope.qBuilds.push(resp.data);
-//console.log($scope.qBuilds);
-},function(ERR){})});
-
+  $scope.queuedBuild = resp.data.build;
+  $scope.queuedBuild.forEach(function(build){
+    $http.get($scope.endpoint+build.href).then(function(resp){
+      $scope.qBuilds.push(resp.data);
+    },function(ERR){
+      }
+    )
+  });
 }, function(err) {
       console.error('ERR', err);
-    });
+   }
+);
+
 });
+

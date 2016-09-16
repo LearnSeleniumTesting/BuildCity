@@ -1,8 +1,18 @@
-<ion-view view-title="Projects">
+<ion-view view-title="Projects-- Fav:{{favList.length}}"  <button>Click</button> >
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="project in conditions.project"  href="#/app/project/{{project.id}}">
-        {{project.name}}!
+      <ion-item>
+        <div class="item item-divider" ng-click="ListOnlyFavProjects()">
+         List your favorite projects <!---<span class="button-clear">(Tap to add more...)</span>-->
+        </div>
+
+      </ion-item>
+      <ion-item ng-repeat="project in conditions.project">
+         <div ng-click="GoToProject(project.id)">{{project.name}}</div>
+        <div class="item-icon-right">
+          <!--<i class="{ favList.indexOf(project.id) ? 'icon button-icon ion-ios-star-outline balanced' : 'icon button-icon ion-ios-star balanced' }" on-tap="addFav(project.id)"></i>-->
+          <i ng-class="{true:'icon button-icon ion-ios-star-outline balanced', false:'icon button-icon ion-ios-star balanced'}[favList.indexOf(project.id) == -1]" on-tap="addFav(project.id)"></i>
+        </div>
       </ion-item>
     </ion-list>
   </ion-content>

@@ -2,6 +2,12 @@
   "name": "HelloIonic",
   "private": "true",
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.2.4"
+    "ionic": "driftyco/ionic-bower#1.2.4",
+    "angular-mocks": "1.3.13"
+  },
+  "dependencies": {
+    "ngCordova": "^0.1.24-alpha",
+    "ionic-multi-date-picker": "^2.0.0",
+    "ionic-datepicker": "^0.9.0"
   }
 }

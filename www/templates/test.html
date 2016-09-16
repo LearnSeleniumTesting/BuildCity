@@ -1,0 +1,28 @@
+<ion-view view-title="My Test Page">
+  <ion-content>
+    <div class="row">
+      <div class="col text-left">
+      <ionic-datepicker input-obj="datepickerObject_start">
+        <div class="col">
+          <button ng-click="to.onclick(model,options)" class="button button-outline button-balanced">
+          <i class="icon ion-ios-calendar-outline"></i> {{datepickerObject_start.inputDate | date:datepickerObject_start.dateFormat}}
+          </button>
+        </div>
+      </ionic-datepicker>
+        </div>
+      <div class="col text-right">
+      <ionic-datepicker side="right" input-obj="datepickerObject_end">
+        <div class="col">
+         <button ng-click="to.onclick(model,options)" class="button button-outline button-balanced">
+      <i class="icon ion-ios-calendar-outline"></i> {{datepickerObject_end.inputDate | date:datepickerObject_end.dateFormat}}
+      </button>
+       </div>
+      </ionic-datepicker>
+        </div>
+    </div>
+    <div>
+    </div>
+    {{showJsonData}}
+
+  </ion-content>
+</ion-view>
