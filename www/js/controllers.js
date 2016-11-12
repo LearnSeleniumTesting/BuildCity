@@ -39,10 +39,10 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('loginCtrl', function($scope, $state, projectsFactory){
+.controller('loginCtrl', function($scope, $state, StorageService, projectsFactory){
 
  //This controller is for login.html where you can click on button to login as guest.
- $scope.activeProject = projectsFactory.all()[0].endpoint;
+ $scope.activeProject = StorageService.selected();
  $scope.guestUrl = null;
 
  $scope.GoToSetting = function(){
@@ -253,7 +253,19 @@ $state.go('app.singleProjectDetail',{projectId: item});
 
 })
 
-.controller('settingsCtrl', function($scope, $ionicModal, projectsFactory){
+.controller('settingsCtrl', function($scope, $ionicModal, $localStorage, StorageService, projectsFactory){
+
+
+  $scope.things = StorageService.getAll();
+
+  $scope.add = function (newThing) {
+    StorageService.add(newThing);
+  };
+
+  $scope.remove = function (thing) {
+    StorageService.remove(thing);
+  };
+
 //This controller is to show the project-settings.html page.
 $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
   scope: $scope
@@ -261,35 +273,42 @@ $ionicModal.fromTemplateUrl('templates/add-new-teamcity-project.html',{
       $scope.modal = modal;
     });
 
+
   $scope.availableProjects = [];
+  $scope.lists = [];
   $scope.availableProjects.push({endpoint: projectsFactory.all()[0].endpoint, selected: true});
-//  console.log($scope.availableProjects);
-// Open the login modal
+  // Open the login modal
   $scope.add = function() {
     $scope.modal.show();
   };
 
   // Triggered in the login modal to close it
-    $scope.closeModal = function() {
-      $scope.modal.hide();
-    };
+  $scope.closeModal = function() {
+     $scope.modal.hide();
+  };
 
+ $scope.update = function(item){
+     StorageService.update_one(item);
 
+ }
   // Add project and once you add, it will clear fields
   $scope.AddProject = function(project){
+  $localStorage = $localStorage.$default({
+    things: []
+  });
 
     if(project.isDefault == true)
     {
-      $scope.availableProjects.forEach(function(obj) { obj.selected = false;  });
+      StorageService.update();
+
     }
-
-    $scope.availableProjects.push({url: project.url, selected: project.isDefault});
-
+    StorageService.add({url: project.endpoint, selected: project.isDefault});
 
 
 
     $scope.closeModal();
     project.url = "";
+
     project.isDefault = false;
   }
 

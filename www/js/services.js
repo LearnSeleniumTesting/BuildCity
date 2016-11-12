@@ -67,6 +67,63 @@ angular.module('starter.service',[])
             }
 
     })
+    .factory ('StorageService', function ($localStorage) {
+
+      $localStorage = $localStorage.$default({
+        things: []
+      });
+
+      var _getAll = function () {
+        return $localStorage.things;
+      };
+
+      var _add = function (thing) {
+        $localStorage.things.push(thing);
+      }
+
+      var _remove = function (thing) {
+        $localStorage.things.splice($localStorage.things.indexOf(thing), 1);
+      }
+
+      var _update = function(){
+        $localStorage.things.forEach(function(obj) { obj.selected = false;  });
+      }
+
+      var _update_One = function(item){
+              $localStorage.things.forEach(function(obj) {
+              if(item.url == obj.url)
+               {
+               obj.selected = true;
+               }else
+                 {
+                                obj.selected = false;
+
+                 }});
+
+      }
+
+      var _selected = function(){
+      var ret = "";
+             $localStorage.things.forEach(function(obj) {
+             if(obj.selected == true)
+               ret = obj.url;
+               });
+
+               return ret;
+      }
+
+
+      return {
+        getAll: _getAll,
+        add: _add,
+        remove: _remove,
+        update: _update,
+        update_one: _update_One,
+        selected: _selected
+
+      };
+    })
+
     .factory('teamcityTimeFormatter', function($http){
 
         return {

@@ -1,16 +1,17 @@
 <ion-view view-title="Settings">
   <ion-content>
     <div class="list">
-      <div class="item item-divider" ng-click="addx()">
-        TeamCity Projects <!---<span class="button-clear">(Tap to add more...)</span>-->
+      <div class="item item-divider" ng-click="add()">
+        TeamCity Projects
+        -<span class="button-clear">(Tap to add more...)</span>
       </div>
 
+      <ion-list ng-repeat="item in things">
+        <ion-radio  ng-model="item.checked" ng-checked="item.selected" ng-click="update({{item}})">
+          {{item.url}}
+        </ion-radio>
+      </ion-list>
 
-      <ion-toggle ng-repeat="item in availableProjects"
-                  ng-model="item.checked"
-                  ng-checked="item.selected">
-        {{ item.endpoint }}
-      </ion-toggle>
       <div class="item item-divider">Other Settings</div>
       </div>
 
