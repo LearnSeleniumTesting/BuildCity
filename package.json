@@ -9,7 +9,7 @@
     "api-check": "^7.5.5",
     "gulp": "^4.0.0",
     "gulp-concat": "^2.2.0",
-    "gulp-minify-css": "^0.3.0",
+    "gulp-minify-css": "^0.5.1",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^3.0.0",
     "ionic-sdk": "^1.2.4",
